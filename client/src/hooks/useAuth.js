@@ -22,8 +22,8 @@ export function useAuth() {
       } else {
         setIsAuthenticated(true);
         setEmail(decodedToken.email);
-        setRole(decodedToken.role); // Set the role from the token
-        console.log(token); //change to cookieparser
+        setRole(decodedToken.role); 
+        console.log(token); 
       }
     }
   }, []);
@@ -37,7 +37,7 @@ export function useAuth() {
     setCookie('token', '');
     setIsAuthenticated(false);
     setEmail(null);
-    setRole(null); // Clear the role on logout
+    setRole(null); 
   };
 
   const handleVerify = (token) => {
@@ -57,7 +57,7 @@ export function useAuth() {
 
         setIsAuthenticated(true);
         setEmail(decodedToken.email);
-        setRole(decodedToken.role); // Set the role from the response
+        setRole(decodedToken.role); 
         console.log(response.data);
 
       })
@@ -69,7 +69,7 @@ export function useAuth() {
   return {
     isAuthenticated,
     email,
-    role, // Include role in the returned object
+    role, 
     login,
     logout,
   };

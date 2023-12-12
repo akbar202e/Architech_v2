@@ -20,7 +20,6 @@ import UserEdit from './screens/EditProfile';
 import Kontak from './screens/Kontak';
 import LoginAdmin from './screens/LoginAdmin'
 import DataKategori from './screens/admin/DataKategori'
-//import PrivateRoutes from './utils/PrivateRoutes';
 import PrivateRoutes from './utils/PrivateRoutes';
 import AdminRoutes from './utils/AdminRoutes';
 

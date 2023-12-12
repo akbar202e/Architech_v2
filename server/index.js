@@ -11,10 +11,10 @@ app.use(cookieParser());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'localhost', // alterar para o seu host
-  user: 'root', // alterar para o seu usuário
-  password: 'root', // alterar para a sua senha
-  database: 'architech', // alterar para o seu banco de dados
+  host: 'localhost', 
+  user: 'root', 
+  password: 'root', 
+  database: 'architech', 
 });
 
 db.connect((err) => {
@@ -24,11 +24,9 @@ db.connect((err) => {
   console.log('Connected to the database!');
 });
 
-// Rota de registro de usuário
 app.post('/register', (req, res) => {
   const { nama, email, hp, password } = req.body;
 
-  // Verificar se o usuário já existe
   db.query(
     'SELECT * FROM account WHERE email = ?',
     [email],
@@ -43,13 +41,11 @@ app.post('/register', (req, res) => {
           .json({ message: 'User already exists, try another username' });
       }
 
-      // Criptografar a senha antes de armazená-la no banco de dados
       bcrypt.hash(password, 10, (err, hash) => {
         if (err) {
           throw err;
         }
 
-        // Salvar o usuário no banco de dados
         db.query(
           'INSERT INTO account (nama, email, hp, password) VALUES (?, ?, ?, ?)',
           [nama, email, hp, hash],
@@ -65,11 +61,9 @@ app.post('/register', (req, res) => {
   );
 });
 
-// Rota de login de usuário
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  // Verificar se o usuário existe no banco de dados
   db.query(
     'SELECT * FROM account WHERE email = ?',
     [email],
@@ -84,7 +78,6 @@ app.post('/login', (req, res) => {
           .json({ message: 'Email or password is invalid' });
       }
 
-      // Comparar a senha fornecida com a senha armazenada no banco de dados
       bcrypt.compare(password, results[0].password, (err, match) => {
         if (err) {
           throw err;
@@ -96,7 +89,6 @@ app.post('/login', (req, res) => {
             .json({ message: 'Email or password is invalid' });
         }
 
-        // Gerar um token JWT
         const token = jwt.sign(
           { email: results[0].email, role: results[0].role },
           'jwt',
@@ -110,12 +102,11 @@ app.post('/login', (req, res) => {
   );
 });
 
-// Função de middleware para verificar o token
 function verifyToken(req, res, next) {
   const { authorization } = req.headers;
 
   if (!authorization) {
-    return res.status(401).json({ message: 'Token não fornecido' });
+    return res.status(401).json({ message: 'Token tidak ada' });
   }
 
   const [, token] = authorization.split(' ');
@@ -131,7 +122,6 @@ function verifyToken(req, res, next) {
   });
 }
 
-// Rota protegida
 app.get('/protected', verifyToken, (req, res) => {
   if(req.role !== 'admin'){
     return res.status(200).json({ message: 'Your Token is user' });
@@ -146,13 +136,11 @@ app.listen(3001, () => {
 
 
 app.get('/produk', (req, res) => {
-  // Select the required columns from the 'produk' table
   db.query('SELECT * FROM produk', (err, results) => {
     if (err) {
       throw err;
     }
 
-    // Send the results as JSON
     res.status(200).json(results);
   });
 });
