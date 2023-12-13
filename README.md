@@ -1,11 +1,10 @@
-Architech
 
 install :
 1. cd client
 2. yarn
 3. cd ../server
 4. yarn
-5. import database architech.sql 
+5. Create database and import data architech.sql 
 
 run :
 1. cd client
