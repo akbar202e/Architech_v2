@@ -5,9 +5,9 @@ import Dashboard from '../../components/Dashboard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { faGear, faTrash } from '@fortawesome/free-solid-svg-icons';
-import Tambah from '../../components/TambahProduk';
-import EditProduk from '../../components/EditProduk';
-import HapusProduk from '../../components/HapusProduk';
+import Tambah from '../../components/Produk/TambahProduk';
+import EditProduk from '../../components/Produk/EditProduk';
+import HapusProduk from '../../components/Produk/HapusProduk';
 const KontenProduk = () => {
     const [produkData, setProdukData] = useState([]);
     const [showModalTambah, setShowModalTambah] = useState(false);

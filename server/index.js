@@ -144,3 +144,23 @@ app.get('/produk', (req, res) => {
     res.status(200).json(results);
   });
 });
+
+app.get('/account', (req, res) => {
+  db.query('SELECT * FROM account', (err, results) => {
+    if (err) {
+      throw err;
+    }
+
+    res.status(200).json(results);
+  });
+});
+
+app.get('/transaksi', (req, res) => {
+  db.query('SELECT t.invoice, DATE_FORMAT(t.tanggal, "%d-%m-%Y") AS tanggal, a.nama AS customer, t.total FROM transaksi t JOIN account a ON t.id_account = a.id_account', (err, results) => {
+    if (err) {
+      throw err;
+    }
+
+    res.status(200).json(results);
+  });
+});

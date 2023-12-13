@@ -18,7 +18,6 @@ const NavbarC = () => {
   const handleLogout = () => {
     logout();
     clearFields();
-    toast.warn('You have been logged out');
   };
   return (
     <Navbar collapseOnSelect expand="lg" style={Styles} data-bs-theme="dark">

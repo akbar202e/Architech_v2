@@ -19,7 +19,7 @@ export function LoginPage() {
   const handleLogout = () => {
     logout();
     clearFields();
-    toast.warn('You have been logged out');
+    toast.warn('Anda telah logout');
   };
 
   const clearFields = () => {

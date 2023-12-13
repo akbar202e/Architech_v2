@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom'; 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState(null);
   const [role, setRole] = useState(null);
   const [cookies, setCookie] = useCookies(['token']);
+  const navigate = useNavigate(); 
 
-  console.log(email);
-  console.log(role);
   useEffect(() => {
     const token = cookies.token;
 
@@ -18,12 +20,11 @@ export function useAuth() {
       const decodedToken = jwtDecode(token);
 
       if (decodedToken.exp * 1000 < Date.now()) {
-        logout();
+        handleExpiredToken(); 
       } else {
         setIsAuthenticated(true);
         setEmail(decodedToken.email);
-        setRole(decodedToken.role); 
-        console.log(token); 
+        setRole(decodedToken.role);
       }
     }
   }, []);
@@ -34,10 +35,10 @@ export function useAuth() {
   };
 
   const logout = () => {
-    setCookie('token', '');
+    setCookie('token', '', {expires: new Date(0)});
     setIsAuthenticated(false);
     setEmail(null);
-    setRole(null); 
+    setRole(null);
   };
 
   const handleVerify = (token) => {
@@ -52,24 +53,33 @@ export function useAuth() {
 
         if (decodedToken.exp * 1000 < Date.now()) {
           console.error('Token inválido');
+          handleExpiredToken();
           return;
         }
 
         setIsAuthenticated(true);
         setEmail(decodedToken.email);
-        setRole(decodedToken.role); 
+        setRole(decodedToken.role);
         console.log(response.data);
-
       })
       .catch((error) => {
         console.error(error.response.data);
       });
   };
 
+  const handleExpiredToken = () => {
+    setCookie('token', '', {expires: new Date(0)});
+    setIsAuthenticated(false);
+    setEmail(null);
+    setRole(null);
+    navigate('/login');
+    toast.warn('Sesi telah berakhir');
+  };
+
   return {
     isAuthenticated,
     email,
-    role, 
+    role,
     login,
     logout,
   };
