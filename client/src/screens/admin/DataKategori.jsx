@@ -17,7 +17,7 @@ const KontenKategori = () => {
     const handleCloseHapus = () => setShowModalHapus(false);
     useEffect(() => {
         // Fetch data from the server when the component mounts
-        fetch('http://localhost:3001/produk')
+        fetch('http://localhost:3001/kategori')
           .then((response) => response.json())
           .then((data) => setProdukData(data))
           .catch((error) => console.error('Error fetching data:', error));

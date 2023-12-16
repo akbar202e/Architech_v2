@@ -135,6 +135,17 @@ app.listen(3001, () => {
 });
 
 
+app.get('/kategori', (req, res) => {
+  db.query('SELECT kategori FROM produk GROUP BY kategori', (err, results) => {
+    if (err) {
+      throw err;
+    }
+
+    res.status(200).json(results);
+  });
+});
+
+// PRODUK
 app.get('/produk', (req, res) => {
   db.query('SELECT * FROM produk', (err, results) => {
     if (err) {
@@ -143,6 +154,52 @@ app.get('/produk', (req, res) => {
 
     res.status(200).json(results);
   });
+});
+
+//TAMBAH PRODUK
+app.post('/add-produk', (req, res) => {
+  const { kategori, foto } = req.body;
+  db.query(
+    'INSERT INTO produk (kategori, foto) VALUES (?,?)',
+    [kategori, foto],
+    (err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(201).json({ message: 'Successfully registered user' });
+    }
+  );
+});
+
+
+//EDIT PRODUK
+app.post('/edit-produk', (req, res) => {
+  const { kategori, foto, id_produk } = req.body;
+  db.query(
+    'UPDATE produk SET kategori = ?, foto = ? WHERE id_produk = ? ',
+    [kategori, foto, id_produk],
+    (err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(201).json({ message: 'Successfully edit' });
+    }
+  );
+});
+
+//HAPUS PRODUK
+app.post('/hapus-produk', (req, res) => {
+  const {id_produk} = req.body;
+  db.query(
+    'DELETE FROM produk WHERE id_produk = ?',
+    [id_produk],
+    (err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(201).json({ message: 'Successfully Delete' });
+    }
+  );
 });
 
 app.get('/account', (req, res) => {

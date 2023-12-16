@@ -33,12 +33,12 @@ const KontenProduk = () => {
             <div className="content3text d-flex flex-column justify-content-center px-3 text-center ">
             <div align='end'>
                 <Button className='border-0 px-4 py-1 fs-6 rounded-5' style={{background:'#B1907F'}} onClick={() => setShowModalTambah(true)}>Tambah Data
-                </Button><Tambah showTambah={showModalTambah} handleCloseTambah={handleCloseTambah} />
+                </Button><Tambah showTambah={showModalTambah} handleCloseTambah={handleCloseTambah}  />
             </div>
                 <table className='fs-5 my-2'>
                   <thead>
                    <tr>
-                     <th>No</th>
+                     <th>ID</th>
                      <th>Kategori</th>
                      <th>Foto</th>
                    </tr>
@@ -46,8 +46,13 @@ const KontenProduk = () => {
                   <tbody>
                     {produkData.map((produk,index) =>(
                     <tr key={index}>
-                        <td>{index+1}</td>
+                        <td>{produk.id_produk}</td>
                         <td>{produk.kategori}</td>
+                        {/* <img
+                            src={`data:image/jpeg;base64,${produk.foto}`}
+                            alt={`Produk ${produk.id_produk}`}
+                            style={{ maxWidth: '100px', maxHeight: '100px' }}
+                        /> */}
                         <td><FontAwesomeIcon className='mx-3' icon={faImage}/></td>
                     </tr>
                     ))}
