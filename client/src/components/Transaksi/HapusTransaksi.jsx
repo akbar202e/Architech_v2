@@ -18,6 +18,7 @@ function HapusTransaksi({ showHapus, handleCloseHapus }) {
       toast.error(err.response.data.message);
     });
   };
+  
 
   const handleSimpan = () => {
     handleHapus();

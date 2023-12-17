@@ -11,6 +11,7 @@ function TambahTransaksi({ showTambah, handleCloseTambah }) {
   const [id_account, setId_account] = useState('');
   const [total, setTotal] = useState('');
 
+  
   const handleTambah = () => {
     axios
       .post('http://localhost:3001/add-transaksi', { invoice, tanggal, id_account, total})
