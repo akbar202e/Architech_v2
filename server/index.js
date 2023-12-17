@@ -13,7 +13,7 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: 'localhost', 
   user: 'root', 
-  password: 'root', 
+  password: '', 
   database: 'architech', 
 });
 
@@ -220,4 +220,60 @@ app.get('/transaksi', (req, res) => {
 
     res.status(200).json(results);
   });
+});
+
+//Transaksi
+app.get('/transaksi', (req, res) => {
+  db.query('SELECT * FROM transaksi', (err, results) => {
+    if (err) {
+      throw err;
+    }
+
+    res.status(200).json(results);
+  });
+});
+
+//TAMBAH transaksi
+app.post('/add-transaksi', (req, res) => {
+  const { invoice, tanggal, id_account, total } = req.body;
+  db.query(
+    'INSERT INTO transaksi (invoice, tanggal, id_account, total) VALUES (?,?,?,?)',
+    [invoice, tanggal, id_account, total],
+    (err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(201).json({ message: 'Successfully Add Transaksi' });
+    }
+  );
+});
+
+//EDIT TRANSAKSI
+app.post('/edit-transaksi', (req, res) => {
+  const { tanggal, id_account, total, invoice } = req.body;
+  db.query(
+    'UPDATE transaksi SET tanggal = ?, id_account = ?, total = ? WHERE invoice = ?',
+    [ tanggal, id_account, total, invoice],
+    (err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(201).json({ message: 'Successfully edit' });
+    }
+  );
+});
+
+//HAPUS TRANSAKSI
+app.post('/hapus-transaksi', (req, res) => {
+  const {invoice} = req.body;
+  db.query(
+    'DELETE FROM transaksi WHERE invoice = ?',
+    [invoice],
+    (err) => {
+      if (err) {
+        throw err;
+      }
+      res.status(201).json({ message: 'Successfully Delete' });
+    }
+  );
 });
