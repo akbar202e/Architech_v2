@@ -8,7 +8,6 @@ import logo from '../assets/ArchitechLogo.png';
 import { Link, redirect, useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import NavbarC from '../components/NavbarC'
 
 export function LoginPage() {
   const [email, setEmail] = useState('');
@@ -94,6 +93,10 @@ export function LoginPage() {
             </div>
         </div>
     </div>
+        {isAuthenticated ? 
+        <Link to='/home'>
+          <Button className='backhome border-0 px-2 py-1 rounded-2' style={{background:'#B1907F'}}>Home</Button>
+        </Link> : <></>}
         {role === 'admin' && isAuthenticated ? 
         <Link to='/dashboard'>
           <Button className='adminButton border-0 px-2 py-1 rounded-2' style={{background:'#B1907F'}}>Admin</Button>

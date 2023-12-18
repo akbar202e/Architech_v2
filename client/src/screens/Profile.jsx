@@ -6,8 +6,12 @@ import logo from "../assets/profile.png";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import NavbarC from "../components/NavbarC";
+import { useAuth } from "../hooks/useAuth";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Profile = () => {
+  const {email,nama,hp,password} = useAuth();
   return (
     <div>
       <NavbarC/>
@@ -26,14 +30,17 @@ const Profile = () => {
           </div>
           <div className="loginCard1 p-4 text-center">
             <div className="loginForm1 d-flex flex-column gap-4 p-5">
-              <img src={logo} />
-              <input type="text" placeholder="" value={"Arief Hendra"} />
+              <span style={{backgroundColor:'#B1907F', width:'max-content', alignSelf:'center', borderRadius:'10px'}}>
+              <FontAwesomeIcon className='m-2' icon={faUser} size="2xl" style={{color: "#ffffff",}} />
+              </span>
+              <input type="text" placeholder="" value={nama} disabled />
               <input
                 type="text"
                 placeholder=""
-                value={"arief.hendra@gmail.com"}
+                value={email}
+                disabled
               />
-              <input type="text" placeholder="" value={"081234578934"} />
+              <input type="text" placeholder="" value={hp} disabled/>
             </div>
           </div>
         </div>

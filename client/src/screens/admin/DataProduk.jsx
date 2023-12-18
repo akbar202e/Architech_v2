@@ -23,8 +23,8 @@ const KontenProduk = () => {
           .then((response) => response.json())
           .then((data) => setProdukData(data))
           .catch((error) => console.error('Error fetching data:', error));
-      }, []); // Empty dependency array to fetch data only once when the component mounts    
-
+      }, []); // Empty dependency array to fetch data only once when the component mounts
+    
     return (
         <div className="container content2 p-5">
             <h2 className='text-light'>Data Produk</h2>
@@ -33,41 +33,38 @@ const KontenProduk = () => {
             <div className="content3text d-flex flex-column justify-content-center px-3 text-center ">
             <div align='end'>
                 <Button className='border-0 px-4 py-1 fs-6 rounded-5' style={{background:'#B1907F'}} onClick={() => setShowModalTambah(true)}>Tambah Data
-                </Button><Tambah showTambah={showModalTambah} handleCloseTambah={handleCloseTambah}  />
+                </Button><Tambah showTambah={showModalTambah} handleCloseTambah={handleCloseTambah} />
             </div>
-                <table className='fs-5 my-2'>
-                  <thead>
-                   <tr>
-                     <th>ID</th>
-                     <th>Kategori</th>
-                     <th>Foto</th>
-                   </tr>
-                  </thead>
-                  <tbody>
+            <table className='fs-5 my-2'>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Kategori</th>
+                        <th>Foto</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {produkData.map((produk,index) =>(
                     <tr key={index}>
                         <td>{produk.id_produk}</td>
                         <td>{produk.kategori}</td>
-                        {/* <img
-                            src={`data:image/jpeg;base64,${produk.foto}`}
-                            alt={`Produk ${produk.id_produk}`}
-                            style={{ maxWidth: '100px', maxHeight: '100px' }}
-                        /> */}
-                        <td><FontAwesomeIcon className='mx-3' icon={faImage}/></td>
+                        <td>
+                            <img src={produk.image_path} alt="Produk Image"/>
+                        </td>
                     </tr>
                     ))}
-                  </tbody>
-                </table>
-                <div align='end'>
+                </tbody>
+            </table>
+            <div align='end'>
                 <Button className='border-0 mx-2' style={{backgroundColor:'#B1907F'}} onClick={() => setShowModalEdit(true)}>
                     <FontAwesomeIcon className='' icon={faGear} size='lg'/>
                 </Button><EditProduk showEdit={showModalEdit} handleCloseEdit={handleCloseEdit} />
                 <Button className='border-0 mx-2' style={{backgroundColor:'#B1907F'}} onClick={() => setShowModalHapus(true)}>
                     <FontAwesomeIcon className='mx-1' icon={faTrash} size='lg'/>
                 </Button><HapusProduk showHapus={showModalHapus} handleCloseHapus={handleCloseHapus} />
-                </div>
             </div>
-            </div>
+        </div>
+        </div>
         </div>
     );
 }

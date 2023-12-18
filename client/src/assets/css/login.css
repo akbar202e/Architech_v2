@@ -59,6 +59,11 @@
     bottom: 1rem;
     right: 1rem;
 }
+.backhome{
+    position: absolute;
+    bottom: 4rem;
+    right: 1rem;
+}
 .footerFlex {
     display: flex;
     flex-direction: row;

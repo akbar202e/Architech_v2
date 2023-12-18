@@ -10,6 +10,9 @@ export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState(null);
   const [role, setRole] = useState(null);
+  const [nama, setNama] = useState(null);
+  const [hp, setHp] = useState(null);
+  const [password, setPassword] = useState(null);
   const [cookies, setCookie] = useCookies(['token']);
   const navigate = useNavigate(); 
 
@@ -25,6 +28,21 @@ export function useAuth() {
         setIsAuthenticated(true);
         setEmail(decodedToken.email);
         setRole(decodedToken.role);
+
+        axios
+        .get('http://localhost:3001/getUser', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setNama(response.data.nama);
+          setHp(response.data.hp);
+          setPassword(response.data.password);
+        })
+        .catch((error) => {
+          console.error(error.response.data);
+        });
       }
     }
   }, []);
@@ -60,6 +78,9 @@ export function useAuth() {
         setIsAuthenticated(true);
         setEmail(decodedToken.email);
         setRole(decodedToken.role);
+        setNama(decodedToken.nama);
+        setHp(decodedToken.hp);
+        setPassword(decodedToken.password);
         console.log(response.data);
       })
       .catch((error) => {
@@ -80,6 +101,9 @@ export function useAuth() {
     isAuthenticated,
     email,
     role,
+    nama,
+    hp,
+    password,
     login,
     logout,
   };

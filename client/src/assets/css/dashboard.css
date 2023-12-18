@@ -144,7 +144,7 @@
   .barProfile p{
     font-weight: 500;
     font-size: 25px;
-    padding: 2%;
+    padding: 3%;
     display: flex;
     align-items: center;
     color: var(--lightText);

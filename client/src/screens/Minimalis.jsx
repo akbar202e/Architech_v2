@@ -8,6 +8,7 @@ import m3 from '../assets/portofolio/minimalis/m3.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarkerAlt, faCube, faBed } from '@fortawesome/free-solid-svg-icons';
 import FooterC from '../components/FooterC';
+import { Link } from 'react-router-dom';
 
 function Minimalis  () {
   const slides = [
@@ -49,7 +50,7 @@ function Minimalis  () {
             <p className='m-0'><FontAwesomeIcon icon={faCube}/> 10M X 20M</p>
             <p className='m-0'><FontAwesomeIcon icon={faMapMarkerAlt}/> Kota Semarang</p>
             </div>
-              <Button className='border-0 px-3 py-1 fs-6 rounded-5' style={{background:'#B1907F'}}>Selengkapnya</Button>
+              <Link to='http://wa.me/+6288230159634'><Button className='border-0 px-3 py-1 fs-6 rounded-5' style={{background:'#B1907F'}}><b>Pesan Sekarang !</b></Button></Link>
             </div>
         </div>
         <div className="box my-4">
@@ -62,7 +63,7 @@ function Minimalis  () {
               <p className='m-0'><FontAwesomeIcon icon={faCube}/> 10M X 20M</p>
               <p className='m-0'><FontAwesomeIcon icon={faMapMarkerAlt}/> Kota Semarang</p>
               </div>
-                <Button className='border-0 px-3 py-1 fs-6 rounded-5' style={{background:'#B1907F'}}>Selengkapnya</Button>
+                <Link to='http://wa.me/+6288230159634'><Button className='border-0 px-3 py-1 fs-6 rounded-5' style={{background:'#B1907F'}}><b>Pesan Sekarang !</b></Button></Link>
                 </div>
         </div>
         <div className="box my-4">
@@ -75,7 +76,7 @@ function Minimalis  () {
               <p className='m-0'><FontAwesomeIcon icon={faCube}/> 10M X 20M</p>
               <p className='m-0'><FontAwesomeIcon icon={faMapMarkerAlt}/> Kota Semarang</p>
               </div>
-                <Button className='border-0 px-3 py-1 fs-6 rounded-5' style={{background:'#B1907F'}}>Selengkapnya</Button>
+                <Link to='http://wa.me/+6288230159634'><Button className='border-0 px-3 py-1 fs-6 rounded-5' style={{background:'#B1907F'}}><b>Pesan Sekarang !</b></Button></Link>
             </div>
         </div>
         <FooterC/>

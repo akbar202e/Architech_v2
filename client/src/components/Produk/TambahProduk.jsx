@@ -8,23 +8,22 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function TambahProduk({ showTambah, handleCloseTambah }) {
   const [kategori, setKategori] = useState('');
-  const [foto, setFoto] = useState('');
+  const [image, setImage] = useState(null);
 
-  const handleTambah = () => {
-    axios
-      .post('http://localhost:3001/add-produk', { kategori, foto})
-      .then((res) => {
-        toast.success(res.data.message);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+  const handleTambah = async () => {
+    const formData = new FormData();
+    formData.append('kategori', kategori);
+    formData.append('image', image);
+
+    const response = await axios.post('http://localhost:3001/add-produk', formData);
+    toast.success(response.data.message);
   };
 
   const handleSimpan = () => {
     handleTambah();
     handleCloseTambah();
   }
+
   return (
     <>
       <Modal show={showTambah} onHide={handleCloseTambah}>
@@ -49,8 +48,7 @@ function TambahProduk({ showTambah, handleCloseTambah }) {
               <Form.Label>Foto</Form.Label>
               <Form.Control
                 type="file"
-                value={foto} 
-                onChange={(e) => setFoto(e.target.value)}
+                onChange={(e) => setImage(e.target.files[0])}
                 autoFocus
               />
             </Form.Group>
