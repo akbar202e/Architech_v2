@@ -1,8 +1,29 @@
+import axios from 'axios';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import { toast } from 'react-toastify';
 
 function HapusTransaksi({ showHapus, handleCloseHapus }) {
+  const [invoice, setInvoice] = useState('');
+
+  const handleHapus = () => {
+    axios
+    .post('http://localhost:3001/hapus-transaksi', { invoice })
+    .then((res) => {
+      toast.success(res.data.message);
+    })
+    .catch((err) => {
+      toast.error(err.response.data.message);
+    });
+  };
+  
+
+  const handleSimpan = () => {
+    handleHapus();
+    handleCloseHapus();
+  }
   return (
     <>
       <Modal show={showHapus} onHide={handleCloseHapus}>
@@ -15,6 +36,8 @@ function HapusTransaksi({ showHapus, handleCloseHapus }) {
               <Form.Label>No Invoice</Form.Label>
               <Form.Control
                 type="number"
+                value={invoice} 
+                onChange={(e) => setInvoice(e.target.value)}
                 autoFocus
                 placeholder='Masukan Invoice data yang ingin dihapus'
               />
@@ -25,7 +48,7 @@ function HapusTransaksi({ showHapus, handleCloseHapus }) {
           <Button variant="secondary" className='border-0' onClick={handleCloseHapus}>
             Batal
           </Button>
-          <Button style={{background:'#B1907F'}} className='border-0' onClick={handleCloseHapus}>
+          <Button style={{background:'#B1907F'}} className='border-0' onClick={handleSimpan}>
             Simpan
           </Button>
         </Modal.Footer>

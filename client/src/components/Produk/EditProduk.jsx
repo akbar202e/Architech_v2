@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function EditProduk({ showEdit, handleCloseEdit }) {
       const [id_produk, setId_produk] = useState('');
       const [kategori, setKategori] = useState('');
-    const [foto, setFoto] = useState('');
+      const [foto, setFoto] = useState('');
   
     const handleEdit = () => {
       axios
