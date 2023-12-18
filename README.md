@@ -12,3 +12,6 @@ run :
 3. new git bash terminal
 4. cd server
 5. yarn start
+
+#if yarn command not found, type :
+npm install -g yarn
