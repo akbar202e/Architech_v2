@@ -38,6 +38,7 @@ function TambahProduk({ showTambah, handleCloseTambah }) {
               value={kategori}
               onChange={(e) => setKategori(e.target.value)}
               >
+            <option>Pilih Kategori</option>
             <option>Minimalis</option>
             <option>Klasik</option>
             <option>Industrial</option>
