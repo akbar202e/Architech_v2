@@ -19,6 +19,7 @@ function HapusProduk({ showHapus, handleCloseHapus }) {
         toast.error(err.response.data.message);
       });
   };
+  
 
   const handleSimpan = () => {
     handleHapus();

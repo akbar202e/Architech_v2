@@ -36,6 +36,7 @@ const KontenCustomer = () => {
                 <table className='fs-5 my-2'>
                   <thead>
                    <tr>
+                     <th className='px-2'>ID</th>
                      <th>Nama</th>
                      <th>Email</th>
                      <th>No Hp</th>
@@ -44,6 +45,7 @@ const KontenCustomer = () => {
                   <tbody>
                   {customerData.map((customer,index) =>(
                     <tr key={index}>
+                        <td>{customer.id_account}</td>
                         <td>{customer.nama}</td>
                         <td>{customer.email}</td>
                         <td>{customer.hp}</td>

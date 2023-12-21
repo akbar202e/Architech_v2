@@ -4,12 +4,14 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function TambahTransaksi({ showTambah, handleCloseTambah }) {
   const [invoice, setInvoice] = useState('');
   const [tanggal, setTanggal] = useState('');
   const [id_account, setId_account] = useState('');
   const [total, setTotal] = useState('');
+  const navigate = useNavigate();
 
   
   const handleTambah = () => {
@@ -26,6 +28,7 @@ function TambahTransaksi({ showTambah, handleCloseTambah }) {
   const handleSimpan = () => {
     handleTambah();
     handleCloseTambah();
+    navigate('/transaksi');
   }
   
   return (

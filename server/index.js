@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const fileUpload = require('express-fileupload');
 const path = require('path');
+const fs = require('fs');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
@@ -11,7 +12,9 @@ const app = express();
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
+app.use('/client/uploads', express.static(path.join(__dirname, 'client', 'uploads')));
 app.use(fileUpload());
+app.use(express.urlencoded({ extended: true }));
 
 const db = mysql.createConnection({
   host: 'localhost', 
@@ -222,18 +225,50 @@ app.get('/produk', (req, res) => {
   });
 });
 
+
+app.get('/image', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'client', 'uploads', 'artwork (1).png'));
+});
 //TAMBAH PRODUK
+// app.post('/add-produk', (req, res) => {
+//   const { kategori } = req.body;
+//   const image = req.files.image;
+//   app.use('/client/uploads', express.static(path.join(__dirname, '..', 'client', 'uploads')));
+
+//   // Use the mv() method to place the file in the "uploads" directory
+//   image.mv(path.join(__dirname, '..', 'client', 'uploads', image.name), (err) => {
+//     if (err) {
+//       return res.status(500).send(err);
+//     }
+  
+//     const image_path = `http://localhost:3001/client/uploads/${image.name}`;
+  
+//     db.query(
+//       'INSERT INTO produk (kategori, image_path) VALUES (?,?)',
+//       [kategori, image_path],
+//       (err) => {
+//         if (err) {
+//           throw err;
+//         }
+//         res.status(201).json({ message: 'Successfully added produk' });
+//       }
+//     );
+//   });
+// });
+
+app.use('/client/uploads', express.static(path.join(__dirname, '..', 'client', 'uploads')));
+
+// Add Product
 app.post('/add-produk', (req, res) => {
   const { kategori } = req.body;
   const image = req.files.image;
 
-  // Use the mv() method to place the file in the "uploads" directory
-  image.mv(path.join(__dirname, 'uploads', image.name), (err) => {
+  image.mv(path.join(__dirname, '..', 'client', 'uploads', image.name), (err) => {
     if (err) {
       return res.status(500).send(err);
     }
 
-    const image_path = `uploads/${image.name}`;
+    const image_path = `http://localhost:3001/client/uploads/${image.name}`;
 
     db.query(
       'INSERT INTO produk (kategori, image_path) VALUES (?,?)',
@@ -248,35 +283,94 @@ app.post('/add-produk', (req, res) => {
   });
 });
 
-
-//EDIT PRODUK
+// Edit Product
 app.post('/edit-produk', (req, res) => {
-  const { kategori, foto, id_produk } = req.body;
-  db.query(
-    'UPDATE produk SET kategori = ?, foto = ? WHERE id_produk = ? ',
-    [kategori, foto, id_produk],
-    (err) => {
+  const {id_produk} = req.body;
+  const { kategori } = req.body;
+  const image = req.files.image;
+
+  // Check if image is provided
+  if (image) {
+    // Delete the previous image
+    db.query('SELECT image_path FROM produk WHERE id_produk = ?', [id_produk], (err, results) => {
       if (err) {
         throw err;
       }
-      res.status(201).json({ message: 'Successfully edit' });
-    }
-  );
+      const previousImage = results[0].image_path;
+      const filename = previousImage.split('/').pop();
+      const filePath = path.join(__dirname, '..', 'client', 'uploads', filename);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          return res.status(500).send(err);
+        }
+        // Proceed with updating the product with the new image
+        image.mv(path.join(__dirname, '..', 'client', 'uploads', image.name), (err) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          const newImagePath = `http://localhost:3001/client/uploads/${image.name}`;
+          // Update the product with the new image path
+          db.query(
+            'UPDATE produk SET kategori=?, image_path=? WHERE id_produk=?',
+            [kategori, newImagePath, id_produk],
+            (err) => {
+              if (err) {
+                throw err;
+              }
+              res.status(200).json({ message: 'Successfully updated produk' });
+            }
+          );
+        });
+      });
+    });
+  } else {
+    // If no new image is provided, update only the kategori
+    db.query(
+      'UPDATE produk SET kategori=? WHERE id_produk=?',
+      [kategori, id_produk],
+      (err) => {
+        if (err) {
+          throw err;
+        }
+        res.status(200).json({ message: 'Successfully updated produk' });
+      }
+    );
+  }
 });
 
-//HAPUS PRODUK
+// Delete Product
 app.post('/hapus-produk', (req, res) => {
   const {id_produk} = req.body;
-  db.query(
-    'DELETE FROM produk WHERE id_produk = ?',
-    [id_produk],
-    (err) => {
-      if (err) {
-        throw err;
-      }
-      res.status(201).json({ message: 'Successfully Delete' });
+  // Check if the product exists
+  db.query('SELECT * FROM produk WHERE id_produk = ?', [id_produk], (err, results) => {
+    if (err) {
+      throw err;
     }
-  );
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    const image_path = results[0].image_path;
+
+    // Delete the file
+    const filename = image_path.split('/').pop();
+    const filePath = path.join(__dirname, '..', 'client', 'uploads', filename);
+
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        return res.status(500).send(err);
+      }
+
+      // Delete the product from the database
+      db.query('DELETE FROM produk WHERE id_produk = ?', [id_produk], (err) => {
+        if (err) {
+          throw err;
+        }
+        res.status(200).json({ message: 'Successfully deleted produk' });
+      });
+    });
+  });
 });
 
 app.get('/account', (req, res) => {
@@ -387,3 +481,17 @@ app.post('/hapus-transaksi', (req, res) => {
     }
   );
 });
+
+app.post("/contact", (req, res) => {
+  const { nama, email, pesan } = req.body;
+    db.query(
+      "INSERT INTO contact (nama, email, pesan) VALUES (?, ?, ?)",
+      [nama, email, pesan],
+      (err) => {
+        if (err) {
+          throw err;
+        }
+        res.status(200).json({ message: "Berhasil mengirim pesan" });
+      }
+    );
+  });

@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "../assets/css/kontak.css";
 import loginImg from "../assets/kontak.png";
 import logo from "../assets/ArchitechLogo.png";
@@ -6,8 +8,23 @@ import NavbarC from "../components/NavbarC";
 import FooterC from "../components/FooterC";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { useAuth } from "../hooks/useAuth";
+import axios from 'axios';
 
 const Kontak = () => {
+  const {email,nama} = useAuth();
+  const [pesan, setPesan] = useState('');
+
+  const handlePesan = () => {
+    axios
+    .post('http://localhost:3001/contact', { nama,email,pesan})
+      .then((res) => {
+        toast.success(res.data.message);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
+  };
   return (
     <div>
       <NavbarC />
@@ -28,17 +45,20 @@ const Kontak = () => {
             <div className="loginForm3 d-flex flex-column gap-4 p-4">
               <img src={logo} />
               <h2 className="text-light fw-bold">Hubungi Kami</h2>
-              <input type="text" placeholder="Username" />
-              <input type="email" placeholder="Email" />
-              <textarea className="form-control" name="" placeholder="Pesan" />
-              <Link to="/">
+              <input type="text" placeholder="" value={nama} disabled />
+              <input type="text" placeholder="" value={email} disabled />
+              <textarea
+              className="form-control"
+              placeholder="Pesan" 
+              value={pesan} 
+              onChange={(e) => setPesan(e.target.value)}
+              />
                 <Button
                   className="submit border-0 px-5 py-1 fs-5 rounded-5"
-                  style={{ background: "#B1907F" }}
-                >
+                  onClick={handlePesan}
+                  style={{ background: "#B1907F" }}>
                   Kirim
                 </Button>
-              </Link>
             </div>
           </div>
         </div>
